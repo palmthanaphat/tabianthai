@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เว็บซื้อขายป้ายทะเบียน</title>
+
+    <link rel="stylesheet" href="page.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+</head>
+
+<body>
+
+
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html">
+                <img src="./imgs/มอไซค์.png" class="logonav">
+            </a>
+
+            <div class="nav-profile">
+                <p class="nav-profile-name">รถเข็น</p>
+                <div onclick="openCart()" style="cursor: pointer;" class="nav-profile-cart">
+                    <i class="fas fa-cart-shopping"></i>
+                    <div id="cartcount" class="cartcount" style="display: none;">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="sidebar">
+            <input onkeyup="searchsomething(this)" id="txt_search" type="text" class="sidebar-search" placeholder="Search something...">
+
+            <a onclick="searchproduct('ทะเบียนทั้งหมด')" class="sidebar-items">
+                ทะเบียนทั้งหมด
+            </a>
+            <a onclick="searchproduct('ทะเบียนรถยนต์')" class="sidebar-items">
+                ทะเบียนรถยนต์
+            </a>
+            <a onclick="searchproduct('ทะเบียนรถจักรยานยนต์')" class="sidebar-items">
+                ทะเบียนรถจักรยานยนต์
+            </a>
+            <br>
+
+            <button onclick="gotologout()" class="btns">Logout!</button>
+        </div>
+        <div id="productlist" class="product">
+
+
+
+        </div>
+    </div>
+
+    <div id="modalDesc" class="modal" style="display: none;">
+        <div onclick="closeModal()" class="modal-bg"></div>
+        <div class="modal-page">
+            <h2>รายละเอียด</h2>
+            <br>
+            <div class="modaldesc-content">
+                <img id="mdd-img" class="modaldesc-img" src="./imgs/${product[i].imgs}" alt="">
+                <div class="modaldesc-detail">
+                    <p id="mdd-name" style="font-size: 1.5vw;">Product name</p>
+                    <p id="mdd-price" style="font-size: 1.2vw;">500 THB</p>
+                    <br>
+                    <p id="mdd-desc" style="color: #adadad;">Lorem iaudantium harum doloremque alias. Quae, vel ipsum quasi, voluptas, sit optio nemo magni numquam non dicta voluptates porro! Vero eveniet numquam sit aut vel eligendi officiis iste tenetur expedita. Delectus vero quibusdam adipisci
+                        in. Esse.</p>
+                    <br>
+                    <div class="btn-control">
+                        <button onclick="closeModal()" class="btn">
+                            ปิด
+                        </button>
+                        <button onclick="addtocart()" class="btn btn-buy">
+                            เพิ่มใส่รถเข็น
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalCart" class="modal" style="display: none;">
+        <div onclick="closeModal()" class="modal-bg"></div>
+        <div class="modal-page">
+            <h2>รถเข็น</h2>
+            <br>
+            <div id="mycart" class="cartlist">
+            </div>
+            <div class="btn-control">
+                <button onclick="closeModal()" class="btn">
+                    ปิด
+                </button>
+                <button onclick="buynow()" class="btn btn-buy">
+                    สั่งซื้อ
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function gotologout() {
+            $.ajax({
+                method: 'post',
+                url: './api/logout.php',
+                data: {
+                    token: localStorage.token
+                },
+                success: (response) => {
+                    console.log('good', response)
+                    if (response.RespCode == 200) {
+                        localStorage.clear();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Logout ',
+                            timer: 1000
+                        }).then(() => {
+                            window.location.href = './index.html'
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Something went wrong!'
+                        })
+                    }
+                },
+                error: (err) => {
+                    console.log('bad', err)
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>
